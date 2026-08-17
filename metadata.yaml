@@ -1,0 +1,7 @@
+name: astrbot_plugin_bilibili_chat
+display_name: Bilibili AI Chat
+desc: 轮询 B站视频评论、@评论和私信，并使用 AstrBot LLM 自动回复。
+version: v1.0.0
+author: astrbot-community
+repo: https://github.com/astrbot-community/astrbot_plugin_bilibili_chat
+astrbot_version: ">=4.16"

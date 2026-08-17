@@ -1,0 +1,136 @@
+{
+  "enabled": {
+    "description": "启用自动轮询与回复",
+    "type": "bool",
+    "hint": "首次安装请先填写 Cookie，或在 AstrBot 管理员会话中执行 /bili login 扫码登录。",
+    "default": false
+  },
+  "conf_routing": {
+    "description": "回复配置文件选择（按来源）",
+    "type": "object",
+    "items": {
+      "video_comments_conf": {
+        "description": "视频评论回复配置",
+        "type": "text",
+        "hint": "填写 AstrBot 配置文件名（如 abconf_xxx.json）、配置名（如“私聊”“群组max”）或配置 ID；填 default 或留空表示使用默认配置。可用 /bili confs 查看。",
+        "default": ""
+      },
+      "mentions_conf": {
+        "description": "@评论回复配置",
+        "type": "text",
+        "hint": "填写 AstrBot 配置文件名（如 abconf_xxx.json）、配置名（如“私聊”“群组max”）或配置 ID；填 default 或留空表示使用默认配置。可用 /bili confs 查看。",
+        "default": ""
+      },
+      "private_messages_conf": {
+        "description": "私信回复配置",
+        "type": "text",
+        "hint": "填写 AstrBot 配置文件名（如 abconf_xxx.json）、配置名（如“私聊”“群组max”）或配置 ID；填 default 或留空表示使用默认配置。可用 /bili confs 查看。",
+        "default": ""
+      }
+    }
+  },
+  "auth": {
+    "description": "B站登录",
+    "type": "object",
+    "items": {
+      "cookie": {
+        "description": "B站 Cookie",
+        "type": "text",
+        "hint": "至少包含 SESSDATA 和 bili_jct；建议同时包含 DedeUserID、buvid3、buvid4。Cookie 仅保存在 AstrBot 本地配置中，请勿发送到聊天。",
+        "default": ""
+      }
+    }
+  },
+  "polling": {
+    "description": "轮询设置",
+    "type": "object",
+    "items": {
+      "interval_seconds": {
+        "description": "轮询间隔（秒）",
+        "type": "int",
+        "hint": "建议不低于 30 秒，过于频繁可能触发平台风控。",
+        "default": 60
+      },
+      "listen_video_comments": {
+        "description": "监听自己视频的新评论",
+        "type": "bool",
+        "default": true
+      },
+      "listen_mentions": {
+        "description": "监听 @自己的评论",
+        "type": "bool",
+        "default": true
+      },
+      "listen_private_messages": {
+        "description": "监听新私信",
+        "type": "bool",
+        "default": true
+      },
+      "max_videos": {
+        "description": "检查最近视频数量",
+        "type": "int",
+        "hint": "每轮只检查最近投稿中的这些视频。",
+        "default": 5
+      },
+      "video_list_refresh_seconds": {
+        "description": "投稿列表刷新间隔（秒）",
+        "type": "int",
+        "default": 300
+      },
+      "ignore_existing_on_first_run": {
+        "description": "首次运行忽略已有消息",
+        "type": "bool",
+        "hint": "开启后首次成功轮询只建立去重基线，不回复历史评论、@和私信。",
+        "default": true
+      }
+    }
+  },
+  "llm": {
+    "description": "AI 回复设置",
+    "type": "object",
+    "items": {
+      "provider_id": {
+        "description": "LLM 提供商（已弃用）",
+        "type": "string",
+        "_special": "select_provider",
+        "hint": "插件已改为走 AstrBot 完整消息管道，使用 AstrBot 全局配置的模型，此设置不再生效。",
+        "default": ""
+      },
+      "persona_prompt": {
+        "description": "回复人设 Prompt（已弃用）",
+        "type": "text",
+        "hint": "插件已改为走 AstrBot 完整消息管道，人设由 AstrBot 全局配置接管，此设置不再生效。",
+        "default": "你是友善、自然的 B站 UP 主助手。请结合消息语境简洁回复，不编造事实，不使用 Markdown。"
+      },
+      "max_reply_chars": {
+        "description": "回复最大字符数",
+        "type": "int",
+        "hint": "管道生成的回复在发送前仍会受此上限截断（B站评论长度有限）。",
+        "default": 300
+      }
+    }
+  },
+  "risk_control": {
+    "description": "风控设置",
+    "type": "object",
+    "items": {
+      "max_replies_per_minute": {
+        "description": "每分钟最多回复数",
+        "type": "int",
+        "hint": "插件会强制限制为不超过 10。",
+        "default": 10
+      },
+      "blacklist_uids": {
+        "description": "用户 UID 黑名单",
+        "type": "list",
+        "hint": "命中后只标记为已处理，不调用 LLM，也不发送回复。",
+        "default": []
+      },
+      "dedup_retention_days": {
+        "description": "去重记录保留天数",
+        "type": "int",
+        "default": 30
+      }
+    }
+  }
+}
